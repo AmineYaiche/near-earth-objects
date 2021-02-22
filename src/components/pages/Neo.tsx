@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react"
 import { NASA_NEO_URL } from "consts"
-import { NEO } from "types/neo"
+import { NEO, OrbittingBody } from "types/neo"
 import _ from "lodash"
 import Loader from "components/atoms/Loader"
 import NeoContext from "./neoContext"
 import NeoChart from "components/molecules/NeoChart"
 import ErrorMessage from "components/atoms/ErrorMessage"
+import OrbitingBodySelect from "components/molecules/OrbitingBodySelect"
 
 
 export default function Neo() {
   const [neo, setNeo] = useState<NEO[]>([])
+  const [selectedOrbittingBody, setSelectedOrbittingBody] = useState<OrbittingBody>("")
   const [hasError, setHasError] = useState(false)
   useEffect(() => {
     (async function () {
@@ -23,6 +25,7 @@ export default function Neo() {
       }
     })()
   }, [])
+
   if (_.isEmpty(neo)) {
     return <Loader />
   }
@@ -30,7 +33,8 @@ export default function Neo() {
     return <ErrorMessage>Failed to load data. More details in the console.</ErrorMessage>
   }
   return (
-    <NeoContext.Provider value={{ neo }}>
+    <NeoContext.Provider value={{ neo, selectedOrbittingBody, setSelectedOrbittingBody }}>
+      <OrbitingBodySelect />
       <NeoChart />
     </NeoContext.Provider>
   )

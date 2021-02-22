@@ -5,8 +5,8 @@ import neoApiParsor from "utils/neoApiParsor"
 
 
 export default function NeoChart() {
-  const { neo } = useContext(neoContext)
-  const data = useMemo(() => neoApiParsor(neo), [neo])
+  const { neo, selectedOrbittingBody } = useContext(neoContext)
+  const data = useMemo(() => neoApiParsor(neo, selectedOrbittingBody), [neo, selectedOrbittingBody])
   const options = {
     hAxis: {
       title: 'Min Estimated Diameter (km)',
@@ -15,7 +15,11 @@ export default function NeoChart() {
       title: 'NEO Name',
     },
   }
-  console.log(data)
+
+  if (data.length === 0) {
+    return <span>No NEO Found</span>
+  }
+
   return <ColumnChart options={options} data={[
     ['', 'Min Estimated Diameter (km)', 'Max Estimated Diameter (km)'],
     ...data
