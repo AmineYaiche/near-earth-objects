@@ -1,7 +1,25 @@
-import { NEO } from "types/neo";
+import { NEO, OrbittingBody } from "types/neo";
+import getNeoOfOrbittingBody from "./getNeoOfOrbittingBody";
 
+/*
+  Parses the NASA Api and return filtred, mapped and sorted neo
+  The filter will be applied if the selectedOrbittingBody params is passed
+  The neo will be sorted by their average estimated diameter
+*/
+export default function neoApiParsor(neo: NEO[], selectedOrbittingBody: OrbittingBody) {
+  let neoOfOrbittingBody: NEO[]
+  if (selectedOrbittingBody === "") {
+    neoOfOrbittingBody = neo
+  } else {
+    neoOfOrbittingBody = getNeoOfOrbittingBody(neo, selectedOrbittingBody)
+  }
+  return _parseNeo(neoOfOrbittingBody)
+}
 
-export default function neoApiParsor(neo: NEO[]) {
+/*
+  A helper function to improve code readability. Used to map and sort the neo list
+*/
+function _parseNeo(neo: NEO[]) {
   return neo
     .map(neoObj => {
       return [
